@@ -169,7 +169,6 @@ export function PetForm() {
           "Content-Type": "application/json",
           // TODO: pass real auth token (auth spec)
           // For now the stub accepts any non-empty token
-          Authorization: "Bearer stub-token",
         },
         body: JSON.stringify(data),
       });

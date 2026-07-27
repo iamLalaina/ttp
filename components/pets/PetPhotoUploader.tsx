@@ -95,7 +95,6 @@ export function PetPhotoUploader({ petId, initialImages }: PetPhotoUploaderProps
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer stub-token",
           },
           body: JSON.stringify({
             petId,
@@ -123,7 +122,6 @@ export function PetPhotoUploader({ petId, initialImages }: PetPhotoUploaderProps
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer stub-token",
           },
           body: JSON.stringify({
             petId,
@@ -192,7 +190,7 @@ export function PetPhotoUploader({ petId, initialImages }: PetPhotoUploaderProps
     try {
       const res = await fetch(`/api/pets/${petId}/images/${imageId}`, {
         method: "DELETE",
-        headers: { Authorization: "Bearer stub-token" },
+        headers: {},
       });
 
       const result: ApiResponse<null> = await res.json();

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LogoutButton } from "@/components/auth/LogoutButton";
 
 export const metadata: Metadata = {
   title: {
@@ -41,6 +42,7 @@ export default function MainLayout({
             <Link href="/profile" className="hover:text-foreground">
               Profile
             </Link>
+            <LogoutButton />
           </div>
         </nav>
       </header>

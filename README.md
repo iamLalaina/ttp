@@ -1,75 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tracing Tiny Paws (TTP)
 
-## Getting Started
+A responsible pet adoption platform connecting rescuers, shelters, and potential adopters.
 
-First, run the development server:
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your values
+
+# Run database migrations
+npx prisma migrate dev
+
+# Seed development data
+npx prisma db seed
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Authentication Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+TTP uses **AWS Cognito** for authentication. There are two modes:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Development Mode (no AWS required)
 
-## Learn More
+Set these in `.env.local`:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+AUTH_DEV_MODE=true
+AUTH_DEV_USER_ID=dev-user-id
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This skips JWT verification and uses a fixed user ID. The login page accepts any email/password and sets a dev cookie. Ideal for local development without AWS credentials.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Important:** Make sure your seed data's `ownerId` matches `AUTH_DEV_USER_ID`.
 
-## Deploy on Vercel
+### Production Mode (AWS Cognito)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Create a Cognito User Pool** in the AWS Console:
+   - Pool name: `ttp-users` (or your choice)
+   - Sign-in: Email
+   - Password policy: minimum 8 characters, require uppercase + lowercase + numbers
+   - MFA: Optional (not required for MVP)
+   - Email verification: Required
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Create an App Client** in the User Pool:
+   - Client name: `ttp-web`
+   - Authentication flows: `ALLOW_USER_SRP_AUTH`, `ALLOW_REFRESH_TOKEN_AUTH`
+   - No client secret (public client)
 
-# 🐾 TTP — Pet Adoption Platform
+3. **Set environment variables:**
 
-TTP is a pet adoption platform that connects rescuers with potential adopters.
+```env
+AUTH_DEV_MODE=false
+AWS_REGION=us-east-1
+AWS_COGNITO_USER_POOL_ID=us-east-1_XXXXXXXXX
+AWS_COGNITO_CLIENT_ID=your-app-client-id
+```
 
-Rescuers can register pets, upload photos, publish adoption listings, and manage adoption requests. Visitors can browse available pets and submit adoption applications.
+4. The app will now:
+   - Verify JWT signatures against Cognito's JWKS endpoint
+   - Use the Cognito `sub` UUID as the user's `ownerId`
+   - Handle registration, email verification, login, token refresh, and logout
 
-## Features
+## Environment Variables
 
-### Rescuer side
-- Register pets
-- Upload pet photos
-- Manage pet information
-- Publish/unpublish pets
-- Review adoption requests
-- Accept or reject adoption applications
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `AWS_REGION` | Yes | AWS region for Cognito and S3 |
+| `AWS_COGNITO_USER_POOL_ID` | Yes* | Cognito User Pool ID |
+| `AWS_COGNITO_CLIENT_ID` | Yes* | Cognito App Client ID |
+| `NEXT_PUBLIC_APP_URL` | Yes | Public URL of the application |
+| `AUTH_DEV_MODE` | No | Set to `true` for dev mode (skips JWT verification) |
+| `AUTH_DEV_USER_ID` | No | User ID used in dev mode (default: `dev-user-id`) |
+| `AWS_S3_BUCKET_NAME` | For uploads | S3 bucket for pet photos |
+| `AWS_ACCESS_KEY_ID` | For uploads | IAM credentials |
+| `AWS_SECRET_ACCESS_KEY` | For uploads | IAM credentials |
 
-### Public catalog
-- Browse available pets
-- View pet details
-- Submit adoption requests without creating an account
+*Not required when `AUTH_DEV_MODE=true`
+
+## Architecture
+
+```
+app/(auth)/*          → Public auth pages (login, register)
+app/(public)/*        → Public pages (catalog, rescuer profiles)
+app/(main)/*          → Protected pages (dashboard, pets, requests, profile)
+app/api/*             → API Route Handlers
+
+repositories/         → Prisma database access
+services/             → Business logic
+schemas/              → Zod validation
+types/                → TypeScript types
+lib/                  → Singletons and utilities
+components/           → React components
+```
 
 ## Tech Stack
 
-- Next.js (App Router)
-- TypeScript
-- Prisma ORM
-- PostgreSQL
-- AWS S3 for image storage
-- Zod validation
-- Tailwind CSS
-- shadcn/ui components
-
-## Getting Started
-
-### 1. Install dependencies
-
-```bash
-npm install
+- Next.js 15 (App Router, Turbopack)
+- React 19 (Server Components)
+- TypeScript 5 (strict mode)
+- Tailwind CSS v4 + shadcn/ui
+- Prisma 7 + PostgreSQL (Supabase)
+- AWS Cognito (authentication)
+- AWS S3 (image storage)
+- Zod v4 (validation)

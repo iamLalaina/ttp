@@ -35,7 +35,6 @@ export function RequestActions({ requestId, currentStatus }: RequestActionsProps
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer stub-token",
         },
         body: JSON.stringify({ status }),
       });

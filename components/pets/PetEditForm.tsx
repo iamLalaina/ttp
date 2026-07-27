@@ -183,7 +183,6 @@ export function PetEditForm({ pet }: PetEditFormProps) {
         headers: {
           "Content-Type": "application/json",
           // TODO: pass real auth token (auth spec)
-          Authorization: "Bearer stub-token",
         },
         body: JSON.stringify(data),
       });

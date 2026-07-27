@@ -65,7 +65,6 @@ export function RescuerProfileForm({ profile }: RescuerProfileFormProps) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer stub-token",
         },
         body: JSON.stringify(data),
       });
