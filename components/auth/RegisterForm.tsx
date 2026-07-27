@@ -47,9 +47,17 @@ export function RegisterForm() {
         setServerError(result.error?.message ?? "Registration failed.");
         return;
       }
-      setEmail(data.email);
-      verifyForm.setValue("email", data.email);
-      setStep("verify");
+      //setEmail(data.email);
+      //verifyForm.setValue("email", data.email);
+      //setStep("verify");
+      if (result.data?.message?.includes("Dev mode")) {
+  setStep("done");
+  return;
+}
+
+setEmail(data.email);
+verifyForm.setValue("email", data.email);
+setStep("verify");
     } catch {
       setServerError("Network error. Please try again.");
     }
@@ -74,12 +82,12 @@ export function RegisterForm() {
     }
   }
 
-  // Done state
+  // Done state Account verified
   if (step === "done") {
     return (
       <div className="space-y-4 text-center">
         <CheckCircle2 className="mx-auto size-10 text-green-600" />
-        <h2 className="text-lg font-semibold">Account verified!</h2>
+        <h2 className="text-lg font-semibold">Account created!</h2>
         <p className="text-sm text-muted-foreground">You can now sign in with your credentials.</p>
         <Link href="/login" className="inline-block text-sm text-primary hover:underline">Go to login</Link>
       </div>

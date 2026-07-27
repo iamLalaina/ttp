@@ -74,7 +74,8 @@ export async function verifyIdToken(
 
   // Development fallback — skip verification
   if (DEV_MODE) {
-    return { id: DEV_USER_ID };
+    //return { id: DEV_USER_ID };
+    return { id: token.replace("dev-token-", "") };
   }
 
   // Production — full JWT verification

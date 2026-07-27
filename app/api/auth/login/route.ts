@@ -43,7 +43,8 @@ export async function POST(
 
     // Dev mode bypass — set a dev cookie
     if (process.env.AUTH_DEV_MODE === "true") {
-      const devUserId = process.env.AUTH_DEV_USER_ID ?? "dev-user-id";
+      //const devUserId = process.env.AUTH_DEV_USER_ID ?? "dev-user-id";
+      const devUserId = email;
       const response = NextResponse.json<ApiResponse<{ message: string }>>(
         { data: { message: "Dev mode: login successful." }, error: null },
         { status: 200 },

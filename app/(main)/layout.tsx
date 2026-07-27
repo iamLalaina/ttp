@@ -39,8 +39,11 @@ export default function MainLayout({
             <Link href="/pets/new" className="hover:text-foreground">
               Register pet
             </Link>
-            <Link href="/profile" className="hover:text-foreground">
-              Profile
+            <Link href="/pets/new" className="hover:text-foreground">
+              Register pet
+            </Link>
+            <Link href="/catalog" className="hover:text-foreground">
+              Catalog
             </Link>
             <LogoutButton />
           </div>
