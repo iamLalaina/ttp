@@ -79,4 +79,6 @@ export type PublicPetDetail = {
   city: string;
   state: string;
   createdAt: Date;
+  /** Profile ID of the rescuer (nullable — profiles are optional). */
+  rescuerProfileId: string | null;
 };

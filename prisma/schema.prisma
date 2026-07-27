@@ -122,3 +122,24 @@ model AdoptionRequest {
   @@index([status])
   @@index([petId, applicantEmail])
 }
+
+
+// ---------------------------------------------------------------------------
+// Rescuer Profile (optional — created when rescuer chooses to set one up)
+// ---------------------------------------------------------------------------
+
+model RescuerProfile {
+  id          String   @id @default(cuid())
+  ownerId     String   @unique
+  displayName String
+  bio         String
+  city        String
+  state       String
+  phone       String?
+  websiteUrl  String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([ownerId])
+}

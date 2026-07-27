@@ -82,4 +82,23 @@ export const petRepository = {
   async update(id: string, data: UpdatePetInput): Promise<Pet> {
     return prisma.pet.update({ where: { id }, data });
   },
+
+  /**
+   * Finds all published pets for a specific owner, with primary image.
+   * Used by the public rescuer profile page.
+   */
+  async findPublishedByOwnerWithPrimaryImage(
+    ownerId: string,
+  ): Promise<(Pet & { images: PetImage[] })[]> {
+    return prisma.pet.findMany({
+      where: { ownerId, status: "published" },
+      include: {
+        images: {
+          where: { order: 0 },
+          take: 1,
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+  },
 };

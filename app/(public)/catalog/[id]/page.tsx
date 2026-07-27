@@ -85,6 +85,18 @@ export default async function PublicPetDetailPage({
       {/* Public pet information */}
       <PublicPetDetailView pet={pet} />
 
+      {/* Rescuer profile link (if the rescuer has a profile) */}
+      {pet.rescuerProfileId && (
+        <div className="rounded-lg border border-border bg-card p-4">
+          <Link
+            href={`/rescuers/${pet.rescuerProfileId}`}
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            View rescuer profile &rarr;
+          </Link>
+        </div>
+      )}
+
       {/* Adoption request form */}
       <AdoptionRequestForm petId={pet.id} />
     </div>
