@@ -1,0 +1,124 @@
+// Prisma schema for Tracing Tiny Paws (TTP)
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Species {
+  dog
+  cat
+}
+
+enum Sex {
+  male
+  female
+}
+
+enum PetSize {
+  small
+  medium
+  large
+}
+
+enum VaccinationStatus {
+  up_to_date
+  partial
+  unknown
+}
+
+enum YesNoUnknown {
+  yes
+  no
+  unknown
+}
+
+enum PetStatus {
+  draft
+  published
+  adopted
+}
+
+// ---------------------------------------------------------------------------
+// Models
+// ---------------------------------------------------------------------------
+
+model Pet {
+  id                   String            @id @default(cuid())
+  ownerId              String
+  name                 String
+  species              Species
+  breed                String
+  ageInMonths          Int
+  sex                  Sex
+  size                 PetSize
+  healthStatus         String
+  vaccinationStatus    VaccinationStatus
+  sterilized           YesNoUnknown
+  friendlyWithChildren YesNoUnknown
+  friendlyWithAnimals  YesNoUnknown
+  description          String
+  city                 String
+  state                String
+  status               PetStatus         @default(draft)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  images               PetImage[]
+  adoptionRequests     AdoptionRequest[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([species])
+}
+
+model PetImage {
+  id          String   @id @default(cuid())
+  petId       String
+  pet         Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  s3Key       String   @unique
+  url         String
+  fileName    String
+  contentType String
+  fileSize    Int
+  order       Int
+  createdAt   DateTime @default(now())
+
+  @@index([petId])
+  @@unique([petId, order])
+}
+
+
+// ---------------------------------------------------------------------------
+// Adoption
+// ---------------------------------------------------------------------------
+
+enum AdoptionRequestStatus {
+  pending
+  accepted
+  rejected
+}
+
+model AdoptionRequest {
+  id             String                @id @default(cuid())
+  petId          String
+  pet            Pet                   @relation(fields: [petId], references: [id], onDelete: Cascade)
+  applicantName  String
+  applicantEmail String
+  message        String
+  status         AdoptionRequestStatus @default(pending)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  @@index([petId])
+  @@index([status])
+  @@index([petId, applicantEmail])
+}
