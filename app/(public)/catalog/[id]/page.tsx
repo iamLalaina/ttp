@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { getImagesForPet } from "@/services/image.service";
 import { PetImageGallery } from "@/components/pets/PetImageGallery";
 import { PublicPetDetailView } from "@/components/catalog/PublicPetDetailView";
 import { AdoptionRequestForm } from "@/components/catalog/AdoptionRequestForm";
-export const dynamic = "force-dynamic";
+
 
 // ---------------------------------------------------------------------------
 // Request-scoped cached function (deduplicated between generateMetadata + page)
