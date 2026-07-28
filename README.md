@@ -1,66 +1,85 @@
 # 🐾 Tracing Tiny Paws (TTP)
 
-A responsible pet adoption platform that connects rescuers, shelters, and potential adopters through a simple and transparent digital experience.
+> **An MVP built during the Kiro + AWS Hackathon to simplify responsible pet adoption through a modern full-stack architecture and cloud-native services.**
 
-## 🌎 Problem
+---
 
-Many rescued animals struggle to find adopters because their information is scattered across social networks, messages, and informal channels. Rescuers need an organized way to publish pets, manage their profiles, and receive adoption requests.
+## 📌 Project Status
 
-**Tracing Tiny Paws (TTP)** provides a centralized platform where rescuers can register pets, upload photos, create public profiles, and connect with people interested in adoption.
+🚀 **MVP — Hackathon Edition**
 
-## 💡 Solution
+This repository contains the first functional version of **Tracing Tiny Paws**, developed as an individual project during the **Kiro + AWS Hackathon (Web Applications Challenge)**.
 
-TTP is a full-stack web application that allows:
+The project was intentionally designed with a scalable architecture to support future features such as AI-assisted pet descriptions, intelligent adopter-pet matching, geolocation search, and shelter management.
 
-* 🐶 Rescuers and shelters to create profiles.
-* 🐾 Register pets available for adoption.
-* 📸 Upload and manage pet images.
-* 🔎 Browse a public adoption catalog.
-* 💌 Send adoption requests.
-* 🔐 Authenticate users securely.
-* 🗂️ Store pet and user information persistently.
+---
 
-The goal is to make pet adoption more organized, accessible, and trustworthy.
+# 🌎 Problem
+
+Animal rescuers and shelters often rely on scattered social media posts, messaging apps, and informal communication channels to publish pets available for adoption.
+
+As a result:
+
+* Pet information becomes fragmented.
+* Adoption requests are difficult to organize.
+* Updates are hard to maintain.
+* Potential adopters struggle to find reliable information.
+
+This creates unnecessary friction for both rescuers and families looking to adopt.
+
+---
+
+# 💡 Solution
+
+**Tracing Tiny Paws (TTP)** is a full-stack web application that centralizes the adoption process into a single platform.
+
+The application allows rescuers to publish and manage pets while providing adopters with a simple, transparent, and organized experience for discovering pets and submitting adoption requests.
+
+Instead of relying on multiple disconnected platforms, TTP offers a structured digital solution designed to grow into a complete adoption ecosystem.
 
 ---
 
 # ✨ Main Features
 
-## Public Adoption Catalog
+## 🐶 Public Adoption Catalog
 
-Anyone can browse available pets without authentication.
+Anyone can browse pets available for adoption without authentication.
 
-Features:
+Features include:
 
-* Pet listings
-* Pet details
-* Rescuer information
-* Adoption request flow
-* Pet images
+* Browse available pets
+* View detailed pet information
+* View rescuer profiles
+* Access adoption requests
+* Display pet photographs
 
-## Rescuer Profiles
+---
 
-Registered users can create a public profile containing:
+## 👤 Rescuer Profiles
 
-* Organization name
+Registered rescuers can create public profiles including:
+
+* Organization or rescuer name
 * Description
 * Location
-* Registered pets
+* Published pets
 
 Example:
 
 * Refugio Luna
-* Pekitas y patitas
+* Pekitas y Patitas
 * Monterrey, Nuevo León
 
-## Pet Management
+---
 
-Rescuers can:
+## 🐾 Pet Management
+
+Authenticated rescuers can:
 
 * Register pets
 * Edit pet information
-* Upload images
-* Publish pets for adoption
+* Upload photographs
+* Publish adoption listings
 
 Stored information includes:
 
@@ -73,68 +92,107 @@ Stored information includes:
 * Sterilization status
 * Health status
 * Compatibility information
+* Description
 
-## Authentication
+---
 
-Users can:
+## 💌 Adoption Requests
 
-* Register accounts
-* Verify email
-* Login
-* Maintain authenticated sessions
-* Access protected features
+Potential adopters can:
 
-Authentication is implemented using Amazon Cognito.
+* View pet details
+* Access rescuer information
+* Submit adoption requests
+* Begin the adoption process
+
+---
+
+## 🔐 Authentication
+
+Secure authentication is implemented using **Amazon Cognito**.
+
+Features:
+
+* User registration
+* Email verification
+* Secure login
+* Session management
+* Protected routes
 
 ---
 
 # 🚀 Live Demo
 
-Application:
+**Production**
 
 https://ttp-khaki.vercel.app
 
-Example pages:
+Useful pages:
 
-* Public catalog:
-  `/catalog`
-
-* Login:
-  `/login`
-
-* Pet details:
-  `/catalog/[pet-id]`
+* `/catalog`
+* `/login`
+* `/register`
 
 ---
 
-# 🏗️ Architecture
+# 🏗️ System Architecture
 
+```text
+                        Users
+                           │
+                           │
+                  Next.js Web Application
+                           │
+         ┌─────────────────┴─────────────────┐
+         │                                   │
+     React UI                       API Route Handlers
+         │                                   │
+         │                          Business Logic
+         │                          Validation
+         │
+         └───────────────┬────────────────────┘
+                         │
+                      Prisma ORM
+                         │
+                  PostgreSQL Database
+                     (Supabase)
+                         │
+        ┌────────────────┴────────────────┐
+        │                                 │
+ Amazon Cognito                     Amazon S3
+ Authentication                  Pet Image Storage
 ```
-                         Users
-                           |
-                           |
-                    Next.js Application
-                           |
-        ---------------------------------------
-        |                  |                  |
-     Frontend          API Routes          Middleware
-        |                  |                  |
-        |                  |                  |
-    React 19          Business Logic     Authentication
-    TypeScript        Validation              |
-                           |
-                    ----------------
-                    |              |
-                 Prisma        AWS Cognito
-                    |
-              PostgreSQL
-              (Supabase)
 
-                           |
-                           |
-                         AWS S3
-                    Pet image storage
-```
+---
+
+# ☁️ AWS Services
+
+## Amazon Cognito
+
+Used for:
+
+* User authentication
+* Email verification
+* JWT token management
+* Secure session handling
+
+**Why?**
+
+Using Cognito removes the need to build a custom authentication system while providing a secure and scalable identity solution.
+
+---
+
+## Amazon S3
+
+Used for:
+
+* Pet image uploads
+* Cloud image storage
+* Public image delivery
+
+**Why?**
+
+Keeping images outside the application server improves scalability and simplifies storage management.
 
 ---
 
@@ -142,49 +200,43 @@ Example pages:
 
 ## Frontend
 
-* Next.js 15 App Router
+* Next.js 15 (App Router)
 * React 19
 * TypeScript
 * Tailwind CSS v4
 * shadcn/ui
 
+---
+
 ## Backend
 
 * Next.js API Route Handlers
 * Prisma ORM
-* PostgreSQL database
-* Zod validation
+* PostgreSQL
+* Zod
 
-## Cloud Services
+---
 
-### AWS Cognito
+## Database
 
-Used for:
-
-* User authentication
-* Email verification
-* JWT token management
-* Secure sessions
-
-### Amazon S3
-
-Used for:
-
-* Pet image storage
-* Image uploads
-* Public pet photos
-
-### Supabase PostgreSQL
-
-Used as the application database.
+* PostgreSQL (Supabase)
 
 Stores:
 
 * Users
-* Rescuer profiles
+* Rescuer Profiles
 * Pets
 * Images
-* Adoption requests
+* Adoption Requests
+
+---
+
+## Cloud
+
+* Amazon Cognito
+* Amazon S3
+
+---
 
 ## Deployment
 
@@ -195,32 +247,33 @@ Stores:
 
 # 📂 Project Structure
 
-```
+```text
 app/
-├── (auth)/              Authentication pages
+├── (auth)/
 │   ├── login
 │   └── register
 │
-├── (public)/            Public pages
+├── (public)/
 │   ├── catalog
-│   └── rescuer profiles
-│
-├── (main)/              Protected application
-│   ├── dashboard
 │   ├── pets
-│   ├── requests
-│   └── profile
+│   └── rescuers
 │
-└── api/                 Backend endpoints
+├── (main)/
+│   ├── dashboard
+│   ├── profile
+│   ├── pets
+│   └── requests
+│
+└── api/
 
-
-components/              Reusable UI components
-lib/                     AWS, Prisma, authentication utilities
-schemas/                 Zod validation schemas
-services/                Application business logic
-repositories/            Database access layer
-types/                   TypeScript definitions
-prisma/                  Database schema and migrations
+components/
+lib/
+repositories/
+services/
+schemas/
+types/
+prisma/
+public/
 ```
 
 ---
@@ -230,8 +283,10 @@ prisma/                  Database schema and migrations
 ## Requirements
 
 * Node.js 22+
-* PostgreSQL database
-* AWS account (only required for production authentication/uploads)
+* PostgreSQL
+* AWS Account (for Cognito and S3)
+
+---
 
 ## Installation
 
@@ -243,13 +298,15 @@ cd ttp
 npm install
 ```
 
-Create environment variables:
+> *(If preferred, the project can also be installed using `pnpm install`.)*
+
+Copy the environment variables:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Run database migrations:
+Run migrations:
 
 ```bash
 npx prisma migrate dev
@@ -261,13 +318,13 @@ Generate Prisma Client:
 npx prisma generate
 ```
 
-Start development server:
+Run the application:
 
 ```bash
 npm run dev
 ```
 
-Application runs on:
+Open:
 
 ```
 http://localhost:3000
@@ -277,71 +334,115 @@ http://localhost:3000
 
 # 🔐 Environment Variables
 
-Example:
-
 ```env
-DATABASE_URL="postgresql://..."
+DATABASE_URL=
 
-AWS_REGION="us-east-2"
+NEXT_PUBLIC_APP_URL=
 
-AWS_S3_BUCKET_NAME="your-bucket"
+AWS_REGION=
 
-AWS_ACCESS_KEY_ID="your-key"
+AWS_S3_BUCKET_NAME=
 
-AWS_SECRET_ACCESS_KEY="your-secret"
+AWS_ACCESS_KEY_ID=
+
+AWS_SECRET_ACCESS_KEY=
+
+AWS_COGNITO_USER_POOL_ID=
+
+AWS_COGNITO_CLIENT_ID=
 
 AUTH_DEV_MODE=true
 
-AUTH_DEV_USER_ID="dev-user-id"
+AUTH_DEV_USER_ID=
 ```
 
 ---
 
-# 🧪 Development Authentication Mode
+# 🧪 Development Mode
 
-For local development, authentication can run in development mode:
+For local development the application supports a development authentication mode.
 
 ```env
 AUTH_DEV_MODE=true
 ```
 
-This allows testing without requiring Cognito configuration.
+This allows developers to test protected functionality without requiring a complete Cognito configuration.
 
 Production mode uses:
 
-* Cognito User Pool
-* JWT verification
-* Secure authentication cookies
+* Amazon Cognito
+* JWT validation
+* Secure authentication flow
 
 ---
 
-# 🌱 Future Improvements
+# 🚀 Roadmap
 
-Possible extensions:
+## ✅ Current MVP
 
-* AI-assisted pet descriptions using AWS Bedrock
-* Pet image classification
-* Notifications for adoption requests
-* Location-based pet discovery
-* Progressive Web App offline support
+* User authentication
+* Public adoption catalog
+* Rescuer profiles
+* Pet management
+* Image uploads
+* Adoption request flow
+* Cloud storage
+* Production deployment
 
 ---
 
-# 👩‍💻 Team
+## 🔄 Next Release
 
-Developed as part of the **Reto 2: Aplicaciones Web** challenge.
+* AI-assisted pet descriptions
+* Automatic pet information suggestions
+* Geolocation search
+* Advanced adoption filters
+* Email notifications
+
+---
+
+## 🌟 Future Vision
+
+Tracing Tiny Paws is designed to evolve into a complete platform for responsible pet adoption by incorporating:
+
+* AI-powered pet compatibility
+* Intelligent search and recommendations
+* Shelter administration tools
+* Veterinary integrations
+* Adoption analytics
+* Mobile application
+* AWS Bedrock integration
+* Community features
+
+---
+
+# 🏆 Hackathon
+
+This project was developed as an individual submission for the **Kiro + AWS Hackathon**, under the **Web Applications Challenge**.
 
 The project demonstrates:
 
-✅ Full-stack web development
-✅ Cloud service integration
-✅ Database persistence
-✅ Authentication
-✅ File storage
-✅ Production deployment
+* ✅ Full-stack web development
+* ✅ Modern application architecture
+* ✅ AWS cloud integration
+* ✅ Authentication with Amazon Cognito
+* ✅ Cloud storage using Amazon S3
+* ✅ Database persistence
+* ✅ Production deployment
+* ✅ Scalable project organization
+
+---
+
+# 👩‍💻 Author
+
+Developed by **Liliana Abigail Torres López**.
+
+Tracing Tiny Paws was inspired by personal experiences and created with the vision of using technology to make responsible pet adoption more organized, accessible, and efficient.
 
 ---
 
 # 📄 License
 
-This project was created for educational and demonstration purposes.
+This project was created for educational purposes as part of the **Kiro + AWS Hackathon**.
+
+It represents the first MVP of a platform that will continue evolving beyond the competition.
