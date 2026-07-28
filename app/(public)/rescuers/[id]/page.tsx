@@ -5,7 +5,7 @@ import { getProfileById } from "@/services/profile.service";
 import { getPublishedPetsByOwner } from "@/services/catalog.service";
 import { PublicProfileView } from "@/components/profile/PublicProfileView";
 import { CatalogGrid } from "@/components/catalog/CatalogGrid";
-
+export const dynamic = "force-dynamic";
 // ---------------------------------------------------------------------------
 // Cached fetch (deduplicated between generateMetadata + page)
 // ---------------------------------------------------------------------------
