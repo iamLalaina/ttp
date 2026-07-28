@@ -1,131 +1,347 @@
-# Tracing Tiny Paws (TTP)
+# 🐾 Tracing Tiny Paws (TTP)
 
-A responsible pet adoption platform connecting rescuers, shelters, and potential adopters.
+A responsible pet adoption platform that connects rescuers, shelters, and potential adopters through a simple and transparent digital experience.
 
-## Quick Start
+## 🌎 Problem
+
+Many rescued animals struggle to find adopters because their information is scattered across social networks, messages, and informal channels. Rescuers need an organized way to publish pets, manage their profiles, and receive adoption requests.
+
+**Tracing Tiny Paws (TTP)** provides a centralized platform where rescuers can register pets, upload photos, create public profiles, and connect with people interested in adoption.
+
+## 💡 Solution
+
+TTP is a full-stack web application that allows:
+
+* 🐶 Rescuers and shelters to create profiles.
+* 🐾 Register pets available for adoption.
+* 📸 Upload and manage pet images.
+* 🔎 Browse a public adoption catalog.
+* 💌 Send adoption requests.
+* 🔐 Authenticate users securely.
+* 🗂️ Store pet and user information persistently.
+
+The goal is to make pet adoption more organized, accessible, and trustworthy.
+
+---
+
+# ✨ Main Features
+
+## Public Adoption Catalog
+
+Anyone can browse available pets without authentication.
+
+Features:
+
+* Pet listings
+* Pet details
+* Rescuer information
+* Adoption request flow
+* Pet images
+
+## Rescuer Profiles
+
+Registered users can create a public profile containing:
+
+* Organization name
+* Description
+* Location
+* Registered pets
+
+Example:
+
+* Refugio Luna
+* Pekitas y patitas
+* Monterrey, Nuevo León
+
+## Pet Management
+
+Rescuers can:
+
+* Register pets
+* Edit pet information
+* Upload images
+* Publish pets for adoption
+
+Stored information includes:
+
+* Species
+* Breed
+* Age
+* Sex
+* Size
+* Vaccination status
+* Sterilization status
+* Health status
+* Compatibility information
+
+## Authentication
+
+Users can:
+
+* Register accounts
+* Verify email
+* Login
+* Maintain authenticated sessions
+* Access protected features
+
+Authentication is implemented using Amazon Cognito.
+
+---
+
+# 🚀 Live Demo
+
+Application:
+
+https://ttp-khaki.vercel.app
+
+Example pages:
+
+* Public catalog:
+  `/catalog`
+
+* Login:
+  `/login`
+
+* Pet details:
+  `/catalog/[pet-id]`
+
+---
+
+# 🏗️ Architecture
+
+```
+                         Users
+                           |
+                           |
+                    Next.js Application
+                           |
+        ---------------------------------------
+        |                  |                  |
+     Frontend          API Routes          Middleware
+        |                  |                  |
+        |                  |                  |
+    React 19          Business Logic     Authentication
+    TypeScript        Validation              |
+                           |
+                    ----------------
+                    |              |
+                 Prisma        AWS Cognito
+                    |
+              PostgreSQL
+              (Supabase)
+
+                           |
+                           |
+                         AWS S3
+                    Pet image storage
+```
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
+
+* Next.js 15 App Router
+* React 19
+* TypeScript
+* Tailwind CSS v4
+* shadcn/ui
+
+## Backend
+
+* Next.js API Route Handlers
+* Prisma ORM
+* PostgreSQL database
+* Zod validation
+
+## Cloud Services
+
+### AWS Cognito
+
+Used for:
+
+* User authentication
+* Email verification
+* JWT token management
+* Secure sessions
+
+### Amazon S3
+
+Used for:
+
+* Pet image storage
+* Image uploads
+* Public pet photos
+
+### Supabase PostgreSQL
+
+Used as the application database.
+
+Stores:
+
+* Users
+* Rescuer profiles
+* Pets
+* Images
+* Adoption requests
+
+## Deployment
+
+* Vercel
+* GitHub
+
+---
+
+# 📂 Project Structure
+
+```
+app/
+├── (auth)/              Authentication pages
+│   ├── login
+│   └── register
+│
+├── (public)/            Public pages
+│   ├── catalog
+│   └── rescuer profiles
+│
+├── (main)/              Protected application
+│   ├── dashboard
+│   ├── pets
+│   ├── requests
+│   └── profile
+│
+└── api/                 Backend endpoints
+
+
+components/              Reusable UI components
+lib/                     AWS, Prisma, authentication utilities
+schemas/                 Zod validation schemas
+services/                Application business logic
+repositories/            Database access layer
+types/                   TypeScript definitions
+prisma/                  Database schema and migrations
+```
+
+---
+
+# ⚙️ Local Development
+
+## Requirements
+
+* Node.js 22+
+* PostgreSQL database
+* AWS account (only required for production authentication/uploads)
+
+## Installation
 
 ```bash
-# Install dependencies
+git clone https://github.com/iamLalaina/ttp.git
+
+cd ttp
+
 npm install
+```
 
-# Set up environment variables
+Create environment variables:
+
+```bash
 cp .env.example .env.local
-# Edit .env.local with your values
+```
 
-# Run database migrations
+Run database migrations:
+
+```bash
 npx prisma migrate dev
+```
 
-# Seed development data
-npx prisma db seed
+Generate Prisma Client:
 
-# Start development server
+```bash
+npx prisma generate
+```
+
+Start development server:
+
+```bash
 npm run dev
 ```
 
-## Authentication Setup
+Application runs on:
 
-TTP uses **AWS Cognito** for authentication. There are two modes:
+```
+http://localhost:3000
+```
 
-### Development Mode (no AWS required)
+---
 
-Set these in `.env.local`:
+# 🔐 Environment Variables
+
+Example:
+
+```env
+DATABASE_URL="postgresql://..."
+
+AWS_REGION="us-east-2"
+
+AWS_S3_BUCKET_NAME="your-bucket"
+
+AWS_ACCESS_KEY_ID="your-key"
+
+AWS_SECRET_ACCESS_KEY="your-secret"
+
+AUTH_DEV_MODE=true
+
+AUTH_DEV_USER_ID="dev-user-id"
+```
+
+---
+
+# 🧪 Development Authentication Mode
+
+For local development, authentication can run in development mode:
 
 ```env
 AUTH_DEV_MODE=true
-AUTH_DEV_USER_ID=dev-user-id
 ```
 
-This skips JWT verification and uses a fixed user ID. The login page accepts any email/password and sets a dev cookie. Ideal for local development without AWS credentials.
+This allows testing without requiring Cognito configuration.
 
-**Important:** Make sure your seed data's `ownerId` matches `AUTH_DEV_USER_ID`.
+Production mode uses:
 
-### Production Mode (AWS Cognito)
+* Cognito User Pool
+* JWT verification
+* Secure authentication cookies
 
-1. **Create a Cognito User Pool** in the AWS Console:
-   - Pool name: `ttp-users` (or your choice)
-   - Sign-in: Email
-   - Password policy: minimum 8 characters, require uppercase + lowercase + numbers
-   - MFA: Optional (not required for MVP)
-   - Email verification: Required
+---
 
-2. **Create an App Client** in the User Pool:
-   - Client name: `ttp-web`
-   - Authentication flows: `ALLOW_USER_SRP_AUTH`, `ALLOW_REFRESH_TOKEN_AUTH`
-   - No client secret (public client)
+# 🌱 Future Improvements
 
-3. **Set environment variables:**
+Possible extensions:
 
-```env
-AUTH_DEV_MODE=false
-AWS_REGION=us-east-1
-AWS_COGNITO_USER_POOL_ID=us-east-1_XXXXXXXXX
-AWS_COGNITO_CLIENT_ID=your-app-client-id
-```
+* AI-assisted pet descriptions using AWS Bedrock
+* Pet image classification
+* Notifications for adoption requests
+* Location-based pet discovery
+* Progressive Web App offline support
 
-4. The app will now:
-   - Verify JWT signatures against Cognito's JWKS endpoint
-   - Use the Cognito `sub` UUID as the user's `ownerId`
-   - Handle registration, email verification, login, token refresh, and logout
+---
 
-## Environment Variables
+# 👩‍💻 Team
 
-| Variable | Required | Description |
-|---|---|---|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `AWS_REGION` | Yes | AWS region for Cognito and S3 |
-| `AWS_COGNITO_USER_POOL_ID` | Yes* | Cognito User Pool ID |
-| `AWS_COGNITO_CLIENT_ID` | Yes* | Cognito App Client ID |
-| `NEXT_PUBLIC_APP_URL` | Yes | Public URL of the application |
-| `AUTH_DEV_MODE` | No | Set to `true` for dev mode (skips JWT verification) |
-| `AUTH_DEV_USER_ID` | No | User ID used in dev mode (default: `dev-user-id`) |
-| `AWS_S3_BUCKET_NAME` | For uploads | S3 bucket for pet photos |
-| `AWS_ACCESS_KEY_ID` | For uploads | IAM credentials |
-| `AWS_SECRET_ACCESS_KEY` | For uploads | IAM credentials |
+Developed as part of the **Reto 2: Aplicaciones Web** challenge.
 
-*Not required when `AUTH_DEV_MODE=true`
+The project demonstrates:
 
-## Architecture
+✅ Full-stack web development
+✅ Cloud service integration
+✅ Database persistence
+✅ Authentication
+✅ File storage
+✅ Production deployment
 
-```
-app/(auth)/*          → Public auth pages (login, register)
-app/(public)/*        → Public pages (catalog, rescuer profiles)
-app/(main)/*          → Protected pages (dashboard, pets, requests, profile)
-app/api/*             → API Route Handlers
+---
 
-repositories/         → Prisma database access
-services/             → Business logic
-schemas/              → Zod validation
-types/                → TypeScript types
-lib/                  → Singletons and utilities
-components/           → React components
-```
+# 📄 License
 
-## Tech Stack
-
-- Next.js 15 (App Router, Turbopack)
-- React 19 (Server Components)
-- TypeScript 5 (strict mode)
-- Tailwind CSS v4 + shadcn/ui
-- Prisma 7 + PostgreSQL (Supabase)
-- AWS Cognito (authentication)
-- AWS S3 (image storage)
-- Zod v4 (validation)
-
-Frontend
-├── Next.js 15
-├── React
-├── TypeScript
-
-Backend
-├── API Routes
-├── Prisma
-├── PostgreSQL
-
-AWS
-├── Amazon S3
-
-Authentication
-├── Amazon Cognito (modo desarrollo para pruebas)
-
-Deployment
-├── Vercel
+This project was created for educational and demonstration purposes.
