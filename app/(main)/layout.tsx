@@ -24,7 +24,7 @@ export default function MainLayout({
       <header className="border-b border-border">
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link
-            href="/"
+            href="/dashboard"
             className="text-sm font-semibold tracking-tight text-foreground hover:text-foreground/80"
           >
             🐾 TTP
@@ -39,8 +39,8 @@ export default function MainLayout({
             <Link href="/pets/new" className="hover:text-foreground">
               Register pet
             </Link>
-            <Link href="/pets/new" className="hover:text-foreground">
-              Register pet
+            <Link href="/profile" className="hover:text-foreground">
+              Profile
             </Link>
             <Link href="/catalog" className="hover:text-foreground">
               Catalog
