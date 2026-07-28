@@ -110,3 +110,22 @@ components/           → React components
 - AWS Cognito (authentication)
 - AWS S3 (image storage)
 - Zod v4 (validation)
+
+Frontend
+├── Next.js 15
+├── React
+├── TypeScript
+
+Backend
+├── API Routes
+├── Prisma
+├── PostgreSQL
+
+AWS
+├── Amazon S3
+
+Authentication
+├── Amazon Cognito (modo desarrollo para pruebas)
+
+Deployment
+├── Vercel
